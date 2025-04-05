@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Add environment variables from .env file
+      - LANCE_API_KEY=${LANCE_API_KEY}
+      - LanceURL=${LanceURL} 

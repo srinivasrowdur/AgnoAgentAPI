@@ -1,0 +1,15 @@
+agno
+openai
+typer[all]
+python-dotenv
+numpy
+lancedb
+pyarrow
+langchain
+pydantic
+pypdf
+pandas
+tantivy
+pylance
+fastapi
+uvicorn
