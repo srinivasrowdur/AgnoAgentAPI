@@ -59,7 +59,7 @@ try:
     # Create individual agents
     SafetyAgent = Agent(
         name="Safety Standards Agent",
-        role="You are an expert on safety standards and protocols. Always provide your response in a concise manner based on the information provided in the documents.",
+        role="You are an expert on safety standards and protocols. Always provide your response in a concise manner based on the information provided in the documents. Use the same language as the documents. Do not make up any information. If you don't know the answer, say so.",
         model=OpenAIChat(id=default_model_id),
         knowledge=safety_knowledge_base,
         search_knowledge=True,
@@ -69,7 +69,7 @@ try:
 
     QualityAgent = Agent(
         name="Quality Standards Agent",
-        role="You are an expert on quality standards and quality assurance processes. Always provide your response in a concise manner based on the information provided in the documents.",
+        role="You are an expert on quality standards and quality assurance processes. Always provide your response in a concise manner based on the information provided in the documents. Use the same language as the documents. Do not make up any information. If you don't know the answer, say so.",
         model=OpenAIChat(id=default_model_id),
         knowledge=quality_knowledge_base,
         search_knowledge=True,
@@ -98,6 +98,9 @@ try:
         "  2. Real-world examples and case studies from the Research Agent",
         "  3. Clear attribution of which information came from which source",
         "Always identify which expert provided which information in your response.",
+        "Do not make up any information. If you don't know the answer, say so.",
+        "Use the same language as the documents.",
+        "Do not mix information from the documents with information from the internet.",
         "Ensure the final response is well-structured and includes both theoretical standards and practical applications."
     ]
 
