@@ -13,3 +13,4 @@ tantivy
 pylance
 fastapi
 uvicorn
+duckduckgo-search

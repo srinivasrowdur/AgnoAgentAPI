@@ -10,6 +10,7 @@ from agno.vectordb.search import SearchType
 from agno.embedder.openai import OpenAIEmbedder
 from agno.models.openai import OpenAIChat
 from agno.team.team import Team
+from agno.tools.duckduckgo import DuckDuckGoTools
 
 # Load environment variables from .env file
 load_dotenv()
@@ -76,14 +77,28 @@ try:
         markdown=True,
     )
 
+    ResearchAgent = Agent(
+        name="Research Agent",
+        role="You are an expert on researching the internet for latest information on safety and quality standards. Your response should be based on the information found on the internet. Find real life latest examples relevnat and Make sure you give the source of the information.",
+        model=OpenAIChat(id=default_model_id),
+        tools=[DuckDuckGoTools()],
+        show_tool_calls=False,
+        markdown=True,
+    )
+
     # Define instructions for team modes
     collaborate_instructions = [
         "First determine whether the question is primarily about safety standards or quality standards.",
         "For safety questions (workplace safety, hazard prevention, fire safety, electrical safety, etc.), primarily rely on the Safety Standards Agent.",
         "For quality questions (quality assurance, cross-contamination prevention, personnel hygiene, etc.), primarily rely on the Quality Standards Agent.",
-        "Synthesize a comprehensive response based on contributions from all experts.",
+        "Use the Research Agent to find real-world examples, case studies, and latest information from the internet to support and validate the responses from other agents.",
+        "The Research Agent should focus on finding concrete examples, recent incidents, and practical applications that illustrate the standards being discussed.",
+        "Synthesize a comprehensive response that combines:",
+        "  1. Standards information from the Safety/Quality Agents",
+        "  2. Real-world examples and case studies from the Research Agent",
+        "  3. Clear attribution of which information came from which source",
         "Always identify which expert provided which information in your response.",
-        "If the question is completely unrelated to either safety or quality standards, respond that you can only answer questions related to safety and quality standards."
+        "Ensure the final response is well-structured and includes both theoretical standards and practical applications."
     ]
 
     route_instructions = [
@@ -125,7 +140,7 @@ try:
         name="Standards Team",
         mode="collaborate",
         model=OpenAIChat(id=default_model_id),
-        members=[SafetyAgent, QualityAgent],
+        members=[SafetyAgent, QualityAgent, ResearchAgent],
         enable_agentic_context=True,
         enable_team_history=True,
         num_of_interactions_from_history=5,
@@ -142,6 +157,7 @@ try:
     AGENTS = {
         "safety": SafetyAgent,
         "quality": QualityAgent,
+        "research": ResearchAgent,
         "team": TeamAgent
     }
     
@@ -159,6 +175,7 @@ except Exception as e:
     TEAM_INSTRUCTIONS = {}
     SafetyAgent = None
     QualityAgent = None
+    ResearchAgent = None
     TeamAgent = None
     
     # Function to check if agents are available
